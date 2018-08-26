@@ -5,12 +5,20 @@
     name: my-ip
     vpc: vpc-849531e0
     region: us-west-2
-    service:
-      name: "{{name}}-{{environ}}"
-      template: service.yml
-      hosted_zone: clustermaestro.com
+    template: service.yml
+    hosted_zone: clustermaestro.com
 
-    tasks:
-      - name: boston
-        debug: var=service
-      # - name: cloudformation
+  tasks:
+    - name: cloudformation
+      cloudformation:
+        stack_name: "{{name}}-ecs"
+        state: present
+        region: "{{region}}"
+        template: "service.yml"
+        template_parameters:
+          VpcId: "{{ vpc }}"
+          ServiceName: "{{ name }}"
+          HostedZone: "{{hosted_zone}}"
+          Environment: prod
+          Priority: "17"
+          Version: "{{ lookup('env', 'VERSION') }}"
