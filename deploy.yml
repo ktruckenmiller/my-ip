@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    name: my-ip
+    vpc: vpc-849531e0
+    region: us-west-2
+    service:
+      name: "{{name}}-{{environ}}"
+      template: service.yml
+      hosted_zone: clustermaestro.com
+
+    tasks:
+      - name: boston
+        debug: var=service
+      # - name: cloudformation
