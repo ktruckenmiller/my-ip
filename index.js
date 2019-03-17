@@ -11,8 +11,7 @@ server.route({
     method: 'GET',
     path: '/',
     handler: (request, h) => {
-        console.dir(request.info)
-        console.log(request.info)
+        console.log(request)
         return request.info.remoteAddress;
     }
 });
