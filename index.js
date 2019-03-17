@@ -12,12 +12,10 @@ server.route({
     path: '/',
     handler: (request, h) => {
       try {
-        console.log(request.headers.xForwardedFor)
-        return request.headers.xForwardedFor;
+        return request.headers['x-forwarded-for'];
       }catch(e) {
         return request.info.remoteAddress;
       }
-
     }
 });
 
