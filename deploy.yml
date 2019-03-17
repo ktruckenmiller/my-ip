@@ -16,7 +16,6 @@
         region: "{{region}}"
         template: "service.yml"
         template_parameters:
-          VpcId: "{{ vpc }}"
           ServiceName: "{{ name }}"
           HostedZone: "{{hosted_zone}}"
           Environment: prod

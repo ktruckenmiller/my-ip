@@ -1,8 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: An ECS deploy of a service
 Parameters:
-  VpcId:
-    Type: String
   ClusterName:
     Type: String
     Default: kloudcover
@@ -32,7 +30,8 @@ Resources:
         HttpCode: 200
       Port: 1
       Protocol: HTTP
-      VpcId: !Ref VpcId
+      VpcId: !ImportValue dc-vpc-exports:VpcId
+
   ListenerRule443:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
@@ -45,6 +44,7 @@ Resources:
           - !Sub ${ServiceName}.${HostedZone}
       ListenerArn: !ImportValue kloudcover-alb:ListenerRule443
       Priority: !Sub ${Priority}
+      
   ListenerCertificate:
     Type: AWS::ElasticLoadBalancingV2::ListenerCertificate
     Properties:
