@@ -11,8 +11,13 @@ server.route({
     method: 'GET',
     path: '/',
     handler: (request, h) => {
-        console.log(request.headers)
+      try {
+        console.log(request.headers.xForwardedFor)
+        return request.headers.xForwardedFor;
+      }catch(e) {
         return request.info.remoteAddress;
+      }
+
     }
 });
 
