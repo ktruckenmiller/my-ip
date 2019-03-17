@@ -18,6 +18,13 @@ server.route({
       }
     }
 });
+server.route({
+  method: 'GET',
+  path: '/health',
+  handler: (request, h) => {
+    return 'OK'
+  }
+})
 
 const init = async () => {
 

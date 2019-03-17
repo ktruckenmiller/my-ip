@@ -25,7 +25,7 @@ Resources:
     Properties:
       HealthCheckIntervalSeconds: 10
       UnhealthyThresholdCount: 4
-      HealthCheckPath: "/"
+      HealthCheckPath: "/health"
       Matcher:
         HttpCode: 200
       Port: 1
@@ -44,7 +44,7 @@ Resources:
           - !Sub ${ServiceName}.${HostedZone}
       ListenerArn: !ImportValue kloudcover-alb:ListenerRule443
       Priority: !Sub ${Priority}
-      
+
   ListenerCertificate:
     Type: AWS::ElasticLoadBalancingV2::ListenerCertificate
     Properties:
