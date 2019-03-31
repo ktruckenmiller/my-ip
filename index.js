@@ -38,14 +38,19 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
 });
 
-// listen on SIGINT signal and gracefully stop the server
-process.on('SIGINT', function () {
+
+const stopServer = () => {
   console.log('stopping hapi server')
 
   server.stop({ timeout: 10000 }).then(function (err) {
     console.log('hapi server stopped')
     process.exit((err) ? 1 : 0)
   })
-})
+}
+
+// listen on SIGINT signal and gracefully stop the server
+process.on('SIGINT', stopServer)
+process.on('SIGTERM', stopServer)
+
 
 init();
