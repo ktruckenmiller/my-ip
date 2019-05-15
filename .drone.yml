@@ -1,16 +1,29 @@
 pipeline:
-  build:
-    repo: 601394826940.dkr.ecr.us-west-2.amazonaws.com/my-ip
-    image: plugins/ecr
-    region: us-west-2
-    tags:
-      - latest
-      - ${DRONE_COMMIT}
-
-  deploy:
-    image: ktruckenmiller/ansible:dind
-    environment:
-      - AWS_DEFAULT_REGION=us-west-2
-      - VERSION=${DRONE_COMMIT}
-    commands:
-      - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
+  - name: build-docker
+    image: plugins/docker
+    depends_on: [ clone ]
+    settings:
+      repo: ktruckenmiller/aws-http-healthcheck
+      tags: latest
+      username:
+        from_secret: username
+      password:
+        from_secret: password
+      when:
+        branch: [master]
+        event: [push]
+  # build:
+  #   repo: 601394826940.dkr.ecr.us-west-2.amazonaws.com/my-ip
+  #   image: plugins/ecr
+  #   region: us-west-2
+  #   tags:
+  #     - latest
+  #     - ${DRONE_COMMIT}
+  #
+  # deploy:
+  #   image: ktruckenmiller/ansible:dind
+  #   environment:
+  #     - AWS_DEFAULT_REGION=us-west-2
+  #     - VERSION=${DRONE_COMMIT}
+  #   commands:
+  #     - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
