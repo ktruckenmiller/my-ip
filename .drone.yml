@@ -1,4 +1,7 @@
-pipeline:
+---
+kind: pipeline
+name: build-lambda
+steps:
   - name: build-docker
     image: plugins/docker
     depends_on: [ clone ]
