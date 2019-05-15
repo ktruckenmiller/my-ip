@@ -3,7 +3,7 @@ pipeline:
     image: plugins/docker
     depends_on: [ clone ]
     settings:
-      repo: ktruckenmiller/aws-http-healthcheck
+      repo: ktruckenmiller/my-ip
       tags: latest
       username:
         from_secret: username
