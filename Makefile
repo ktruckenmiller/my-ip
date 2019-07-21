@@ -20,4 +20,4 @@ deploy:
 	-v $(shell pwd):/work \
 	-w /work \
 	ktruckenmiller/ansible \
-	ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
+	ansible-playbook -i ansible_connection=localhost deploy.yml -vvv -e region=us-east-2 -e environ=dev

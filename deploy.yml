@@ -2,9 +2,8 @@
 - hosts: localhost
   gather_facts: false
   vars:
-    name: my-ip
-    vpc: vpc-849531e0
-    region: us-west-2
+    name: jamf
+    vpc: vpc-9aab64f3
     template: service.yml
     hosted_zone: clustermaestro.com
 
@@ -18,7 +17,10 @@
         template_parameters:
           ServiceName: "{{ name }}"
           HostedZone: "{{hosted_zone}}"
-          Environment: prod
+          Environment: "{{environ}}"
           Priority: "17"
-          CertId: 619c392f-3539-4951-b2b9-89fb2dca27d9
-          Version: "{{ lookup('env', 'VERSION') }}"
+          Vpc: "{{vpc}}"
+          CertId: 89eb20e3-7dad-489a-ad1a-619cae4a2c29
+          Version: latest
+          Subnets: subnet-0c00ee77,subnet-a6954dcf,subnet-d65b579c
+          ClusterName: "{{environ}}-{{name}}"
