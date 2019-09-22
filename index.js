@@ -18,6 +18,7 @@ server.route({
       }
     }
 });
+
 server.route({
   method: 'GET',
   path: '/health',
