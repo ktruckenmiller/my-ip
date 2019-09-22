@@ -7,7 +7,9 @@ steps:
     depends_on: [ clone ]
     settings:
       repo: ktruckenmiller/my-ip
-      tags: latest
+      tags:
+        - ${DRONE_COMMIT}
+        - latest
       username:
         from_secret: username
       password:
@@ -15,18 +17,28 @@ steps:
       when:
         branch: [master]
         event: [push]
-  # build:
-  #   repo: 601394826940.dkr.ecr.us-west-2.amazonaws.com/my-ip
-  #   image: plugins/ecr
-  #   region: us-west-2
-  #   tags:
-  #     - latest
-  #     - ${DRONE_COMMIT}
-  #
-  # deploy:
-  #   image: ktruckenmiller/ansible:dind
-  #   environment:
-  #     - AWS_DEFAULT_REGION=us-west-2
-  #     - VERSION=${DRONE_COMMIT}
-  #   commands:
-  #     - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
+        
+  - name: deploy-clustermaestro
+    image: ktruckenmiller/ansible
+    depends_on: [build-docker]
+    environment:
+      AWS_DEFAULT_REGION: us-west-2
+      VERSION: ${DRONE_COMMIT}
+      SERVICE_NAME: my-ip
+      CLUSTER: kloudcover
+      PRIORITY: "17"
+
+    commands:
+      - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
+
+  - name: deploy-jamf
+    image: ktruckenmiller/ansible
+    depends_on: [build-docker]
+    environment:
+      AWS_DEFAULT_REGION: us-west-2
+      VERSION: ${DRONE_COMMIT}
+      SERVICE_NAME: jamf
+      CLUSTER: staging-kloudcover
+      PRIORITY: "18"
+    commands:
+      - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv

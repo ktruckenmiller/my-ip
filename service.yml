@@ -3,7 +3,6 @@ Description: An ECS deploy of a service
 Parameters:
   ClusterName:
     Type: String
-    Default: kloudcover
   HostedZone:
     Type: String
   CertId:
