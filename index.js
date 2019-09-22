@@ -45,7 +45,6 @@ const stopServer = () => {
     process.exit((err) ? 1 : 0)
   })
 }
-
 // listen on SIGINT signal and gracefully stop the server
 process.on('SIGINT', stopServer)
 process.on('SIGTERM', stopServer)
