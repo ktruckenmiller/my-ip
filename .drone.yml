@@ -28,18 +28,18 @@ steps:
         - latest
         - ${DRONE_COMMIT}
 
-  - name: deploy-clustermaestro
-    image: ktruckenmiller/ansible
-    depends_on: [build-docker]
-    environment:
-      AWS_DEFAULT_REGION: us-west-2
-      VERSION: ${DRONE_COMMIT}
-      SERVICE_NAME: my-ip
-      CLUSTER: kloudcover
-      PRIORITY: "17"
-
-    commands:
-      - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
+  # - name: deploy-clustermaestro
+  #   image: ktruckenmiller/ansible
+  #   depends_on: [build-docker]
+  #   environment:
+  #     AWS_DEFAULT_REGION: us-west-2
+  #     VERSION: ${DRONE_COMMIT}
+  #     SERVICE_NAME: my-ip
+  #     CLUSTER: kloudcover
+  #     PRIORITY: "17"
+  #
+  #   commands:
+  #     - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
 
   - name: deploy-jamf
     image: ktruckenmiller/ansible
