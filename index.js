@@ -37,7 +37,6 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
 });
 
-
 const stopServer = () => {
   console.log('stopping hapi server')
 
