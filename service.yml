@@ -30,7 +30,7 @@ Resources:
       Port: 1
       Protocol: HTTP
       VpcId: !ImportValue dc-vpc-exports:VpcId
-      TargetGroupAttribute:
+      TargetGroupAttributes:
         - Key: deregistration_delay.timeout_seconds
           Value: 30
         - Key: slow_start.duration_seconds
