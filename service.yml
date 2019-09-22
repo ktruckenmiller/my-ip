@@ -16,6 +16,8 @@ Parameters:
     Type: String
   Priority:
     Type: String
+  Count:
+    Type: String
 
 
 Resources:
@@ -62,7 +64,7 @@ Resources:
     Type: AWS::ECS::Service
     Properties:
       Cluster: !Ref ClusterName
-      DesiredCount: 2
+      DesiredCount: !Ref Count
       LoadBalancers:
         - ContainerName: !Sub ${ServiceName}
           ContainerPort: 3000
@@ -86,7 +88,7 @@ Resources:
         - Name: !Sub ${ServiceName}
           Cpu: 0
           Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/my-ip:${Version}
-          MemoryReservation: 32
+          MemoryReservation: 128
           Environment:
             - Name: SSM_PATH
               Value: !Sub /${ServiceName}/${Environment}

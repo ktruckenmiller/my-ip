@@ -27,3 +27,4 @@
           Priority: "{{ lookup('env', 'PRIORITY') }}"
           CertId: 619c392f-3539-4951-b2b9-89fb2dca27d9
           Version: "{{ lookup('env', 'VERSION') }}"
+          Count: "{{ lookup('env', 'COUNT')}}"
