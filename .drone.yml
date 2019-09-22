@@ -36,7 +36,7 @@ steps:
   #     VERSION: ${DRONE_COMMIT}
   #     SERVICE_NAME: my-ip
   #     CLUSTER: kloudcover
-  #     PRIORITY: "17"
+  #     PRIORITY: 17
   #
   #   commands:
   #     - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
@@ -49,6 +49,6 @@ steps:
       VERSION: ${DRONE_COMMIT}
       SERVICE_NAME: jamf
       CLUSTER: staging-kloudcover
-      PRIORITY: "23"
+      PRIORITY: 23
     commands:
       - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
