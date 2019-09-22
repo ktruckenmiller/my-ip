@@ -6,7 +6,7 @@
     region: us-west-2
     template: service.yml
     hosted_zone: clustermaestro.com
-
+    environ: prod
   tasks:
     - set_fact:
         name: "{{lookup('env', 'SERVICE_NAME')}}"
@@ -17,11 +17,13 @@
         state: present
         region: "{{region}}"
         template: "service.yml"
+        tags:
+          Environment: "{{environ}}"
         template_parameters:
           ClusterName: "{{lookup('env', 'CLUSTER')}}"
           ServiceName: "{{ name }}"
           HostedZone: "{{hosted_zone}}"
-          Environment: prod
+          Environment: "{{ environ }}"
           Priority: "{{ lookup('env', 'PRIORITY') }}"
           CertId: 619c392f-3539-4951-b2b9-89fb2dca27d9
           Version: "{{ lookup('env', 'VERSION') }}"
