@@ -30,6 +30,11 @@ Resources:
       Port: 1
       Protocol: HTTP
       VpcId: !ImportValue dc-vpc-exports:VpcId
+      TargetGroupAttribute:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 30
+        - Key: slow_start.duration_seconds
+          Value: 30
 
   ListenerRule443:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
