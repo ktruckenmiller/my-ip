@@ -65,6 +65,9 @@ Resources:
     Properties:
       Cluster: !Ref ClusterName
       DesiredCount: !Ref Count
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
       LoadBalancers:
         - ContainerName: !Sub ${ServiceName}
           ContainerPort: 3000

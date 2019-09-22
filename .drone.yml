@@ -2,22 +2,6 @@
 kind: pipeline
 name: build-lambda
 steps:
-  # - name: build-docker
-  #   image: plugins/docker
-  #   depends_on: [ clone ]
-  #   settings:
-  #     repo: ktruckenmiller/my-ip
-  #     tags:
-  #       - ${DRONE_COMMIT}
-  #       - latest
-  #     username:
-  #       from_secret: username
-  #     password:
-  #       from_secret: password
-  #     when:
-  #       branch: [master]
-  #       event: [push]
-
   - name: build-docker
     image: plugins/ecr
     depends_on: [ clone ]
