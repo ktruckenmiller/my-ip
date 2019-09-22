@@ -18,7 +18,7 @@ steps:
   #       branch: [master]
   #       event: [push]
 
-  - name: build_docker
+  - name: build-docker
     image: plugins/ecr
     depends_on: [ clone ]
     settings:
