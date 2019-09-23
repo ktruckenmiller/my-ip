@@ -91,7 +91,7 @@ Resources:
         - Name: !Sub ${ServiceName}
           Cpu: 0
           Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/my-ip:${Version}
-          MemoryReservation: 128
+          MemoryReservation: 256
           Environment:
             - Name: SSM_PATH
               Value: !Sub /${ServiceName}/${Environment}
