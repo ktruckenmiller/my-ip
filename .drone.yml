@@ -21,7 +21,7 @@ steps:
       SERVICE_NAME: my-ip
       CLUSTER: kloudcover
       PRIORITY: 17
-      COUNT: 2
+      COUNT: 1
 
     commands:
       - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
@@ -35,6 +35,6 @@ steps:
       SERVICE_NAME: jamf
       CLUSTER: staging-kloudcover
       PRIORITY: 50
-      COUNT: 30
+      COUNT: 1
     commands:
       - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
