@@ -119,6 +119,7 @@ Resources:
               - !Sub arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/my-ip*
           - Action:
               - logs:*
+              - ecr:GetAuthorizationToken
             Effect: Allow
             Resource: "*"
           - Action: s3:*
