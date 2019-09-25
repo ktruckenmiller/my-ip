@@ -63,7 +63,7 @@ Resources:
                 ParameterOverrides: '{{ codebuild_params | to_json }}'
                 RoleArn: !GetAtt CloudFormationRole.Arn
                 StackName: test-ecs-my-ip
-                TemplateConfiguration: "SourceOutput::parameters-app.json"
+                {# TemplateConfiguration: "SourceOutput::parameters-app.json" #}
                 TemplatePath: "SourceOutput::app-stack.yml"
               InputArtifacts:
                 - Name: SourceOutput
