@@ -26,7 +26,7 @@ Resources:
                 Version: '1'
               Configuration:
                 Branch: !Ref Branch
-                OAuthToken: "{{resolve:secretsmanager:GithubToken:SecretString}}"
+                OAuthToken: "{% raw %}{{resolve:secretsmanager:GithubToken:SecretString}}{% endraw %}"
                 Owner: !Ref Owner
                 PollForSourceChanges: 'false'
                 Repo: !Ref RepoName
@@ -60,7 +60,7 @@ Resources:
               Configuration:
                 ActionMode: CREATE_UPDATE
                 Capabilities: "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND,CAPABILITY_IAM"
-                ParameterOverrides: '{"Count": "2", "Subnets": "subnet-0c00ee77,subnet-a6954dcf,subnet-d65b579c", "ClusterName": "dev-jamf", "ServiceName": "my-ip", "Vpc": "vpc-9aab64f3", "ALBSGBadgeFromCluster": "sg-0e76fbe6ca3610b09"}'
+                ParameterOverrides: '{{ codebuild_params | to_json }}'
                 RoleArn: !GetAtt CloudFormationRole.Arn
                 StackName: test-ecs-my-ip
                 TemplateConfiguration: "SourceOutput::parameters-app.json"
@@ -119,6 +119,7 @@ Resources:
               - !Sub arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/my-ip*
           - Action:
               - logs:*
+              - ecr:GetAuthorizationToken
             Effect: Allow
             Resource: "*"
           - Action: s3:*
@@ -154,7 +155,7 @@ Resources:
     Properties:
       Authentication: GITHUB_HMAC
       AuthenticationConfiguration:
-        SecretToken: "{{resolve:secretsmanager:GithubToken:SecretString}}"
+        SecretToken: "{% raw %}{{resolve:secretsmanager:GithubToken:SecretString}}{% endraw %}"
       Filters:
         - JsonPath: "$.ref"
           MatchEquals: refs/heads/{Branch}

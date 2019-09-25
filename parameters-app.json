@@ -1,8 +1,0 @@
-{
-  "Subnets": "subnet-9b2938c2,subnet-bc3193d8,subnet-ed43849b",
-  "Vpc": "",
-  "ClusterName": "",
-  "ServiceName": "my-ip",
-  "Count": "2",
-  "ALBSGBadgeFromCluster": ""
-}

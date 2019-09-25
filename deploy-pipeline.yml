@@ -6,7 +6,20 @@
     owner: ktruckenmiller
     repo_name: my-ip
     region: us-east-2
+    codebuild_params:
+      Subnets: "subnet-0c00ee77,subnet-a6954dcf,subnet-d65b579c"
+      Vpc: vpc-9aab64f3
+      ClusterName: dev-jamf
+      ServiceName: my-ip
+      Count: "2"
+      ALBSGBadgeFromCluster: sg-0e76fbe6ca3610b09
+
   tasks:
+    - name: jinja-it
+      template:
+        src: codepipeline/pipeline.yml.j2
+        dest: codepipeline/pipeline.yml
+
     - name: cloudformation
       cloudformation:
         stack_name: "{{repo_name}}-pipeline"
