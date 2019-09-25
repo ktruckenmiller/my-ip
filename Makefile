@@ -21,3 +21,11 @@ deploy:
 	-w /work \
 	ktruckenmiller/ansible \
 	ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
+
+put-pipeline:
+	docker run -it --rm \
+	-e IAM_ROLE \
+	-v ${PWD}:/work \
+	-w /work \
+	ktruckenmiller/ansible \
+	ansible-playbook -i ansible_connection=localhost deploy-pipeline.yml

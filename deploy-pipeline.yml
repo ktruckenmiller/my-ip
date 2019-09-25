@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    branch: master
+    owner: ktruckenmiller
+    repo_name: my-ip
+    region: us-east-2
+  tasks:
+    - name: cloudformation
+      cloudformation:
+        stack_name: "{{repo_name}}-pipeline"
+        state: present
+        region: "{{region}}"
+        template: codepipeline/pipeline.yml
+        template_parameters:
+          Branch: "{{branch}}"
+          Owner: "{{owner}}"
+          RepoName: "{{repo_name}}"

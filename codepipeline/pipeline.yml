@@ -1,0 +1,243 @@
+---
+Parameters:
+  RepoName:
+    Type: String
+  Branch:
+    Type: String
+    Default: master
+  Owner:
+    Type: String
+Resources:
+  AppPipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      ArtifactStore:
+        Location: !Sub ecs-cluster-deployer-${AWS::AccountId}-${AWS::Region}
+        Type: S3
+      RoleArn: !GetAtt PipelineRole.Arn
+      Stages:
+      - Name: Source
+        Actions:
+        - ActionTypeId:
+            Category: Source
+            Owner: ThirdParty
+            Provider: GitHub
+            Version: '1'
+          Configuration:
+            Branch: !Ref Branch
+            OAuthToken: "{{resolve:secretsmanager:GithubToken:SecretString}}"
+            Owner: !Ref Owner
+            PollForSourceChanges: 'false'
+            Repo: !Ref RepoName
+          Name: SourceAction
+          OutputArtifacts:
+          - Name: SourceOutput
+          RunOrder: '1'
+
+      - Name: buildapp
+        Actions:
+        - ActionTypeId:
+            Category: Build
+            Owner: AWS
+            Provider: CodeBuild
+            Version: '1'
+          Configuration:
+            ProjectName: !Ref BuildDockerCodebuild
+          InputArtifacts:
+            - Name: SourceOutput
+          Name: AMIBuilder
+          OutputArtifacts:
+            - Name: AMI
+          RunOrder: '1'
+
+      # - Name: Deploy
+      #   Actions:
+      #   - ActionTypeId:
+      #       Category: Build
+      #       Owner: AWS
+      #       Provider: CloudFormation
+      #       Version: '1'
+      #     Configuration:
+      #       ProjectName:
+      #         Ref: DeployDevJamf
+      #     InputArtifacts:
+      #     - Name: AMI
+      #     Name: DeployDevJamf
+      #     RunOrder: '1'
+
+
+
+  # CodeBuildRole:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Statement:
+  #         - Action: sts:AssumeRole
+  #           Effect: Allow
+  #           Principal:
+  #             Service:
+  #               - codebuild.amazonaws.com
+  #     Policies:
+  #     - PolicyName: codebuild-cluster-deployer
+  #       PolicyDocument:
+  #         Statement:
+  #         - Action:
+  #             - ec2:CreateSecurityGroup
+  #             - ec2:DeleteSecurityGroup
+  #             - ec2:CreateTags
+  #             - ec2:AuthorizeSecurityGroupIngress
+  #             - ec2:RequestSpotFleet
+  #             - ec2:CancelSpotFleetRequests
+  #             - ec2:Describe*
+  #             - ec2:RevokeSecurityGroupIngress
+  #             - iam:CreateRole
+  #             - iam:CreateInstanceProfile
+  #             - iam:DeleteInstanceProfile
+  #             - iam:RemoveRoleFromInstanceProfile
+  #             - iam:DeleteInstanceProfile
+  #             - iam:AddRoleToInstanceProfile
+  #             - iam:DeleteRole
+  #             - iam:DeleteRolePolicy
+  #             - iam:PutRolePolicy
+  #             - iam:List*
+  #             - iam:Get*
+  #             - iam:PassRole
+  #             - ssm:PutParameter
+  #             - ssm:DeleteParameter
+  #             - ssm:AddTagsToResource
+  #             - logs:*
+  #             - lambda:*
+  #             - events:*
+  #             - ecs:*
+  #             - cloudformation:ListStacks
+  #           Effect: Allow
+  #           Resource: "*"
+  #         - Action:
+  #           - cloudformation:*
+  #           Effect: Allow
+  #           Resource:
+  #             - arn:aws:cloudformation:*:*:stack/*
+  #         - Action:
+  #             - s3:*
+  #           Effect: Allow
+  #           Resource:
+  #           - !Sub arn:aws:s3:::ecs-cluster-deployer-${AWS::AccountId}-${AWS::Region}
+  #           - !Sub arn:aws:s3:::ecs-cluster-deployer-${AWS::AccountId}-${AWS::Region}/*
+
+
+  CodeBuildDockerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+              - codebuild.amazonaws.com
+      Policies:
+      - PolicyName: codebuild-app
+        PolicyDocument:
+          Statement:
+          - Action:
+              - ecr:*
+            Effect: Allow
+            Resource:
+              - !Sub arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/my-ip*
+          - Action:
+              - logs:*
+            Effect: Allow
+            Resource: "*"
+          # - Action:
+          #     - ssm:GetParametersByPath
+          #     - ssm:GetParameters
+          #     - ssm:GetParameter
+          #   Effect: Allow
+          #   Resource:
+          #     - arn:aws:ssm:*:*:parameter/aws/service/ecs*
+          - Action: s3:*
+            Effect: Allow
+            Resource:
+            - !Sub arn:aws:s3:::ecs-cluster-deployer-${AWS::AccountId}-${AWS::Region}
+            - !Sub arn:aws:s3:::ecs-cluster-deployer-${AWS::AccountId}-${AWS::Region}/*
+
+
+  BuildDockerCodebuild:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        EnvironmentVariables:
+          - Name: AWS_DEFAULT_REGION
+            Value: !Sub ${AWS::Region}
+          - Name: AWS_ACCOUNT_ID
+            Value: !Sub ${AWS::AccountId}
+          - Name: IMAGE_REPO_NAME
+            Value: my-ip
+        Image: aws/codebuild/standard:2.0
+        PrivilegedMode: 'true'
+        Type: LINUX_CONTAINER
+      ServiceRole: !Ref CodeBuildDockerRole
+      Source:
+        Type: CODEPIPELINE
+
+  GitHook:
+    Type: AWS::CodePipeline::Webhook
+    Properties:
+      Authentication: GITHUB_HMAC
+      AuthenticationConfiguration:
+        SecretToken: "{{resolve:secretsmanager:GithubToken:SecretString}}"
+      Filters:
+        - JsonPath: "$.ref"
+          MatchEquals: refs/heads/{Branch}
+      RegisterWithThirdParty: 'true'
+      TargetAction: SourceAction
+      TargetPipeline: !Ref AppPipeline
+      TargetPipelineVersion: !GetAtt AppPipeline.Version
+
+
+  PipelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service: codepipeline.amazonaws.com
+      Policies:
+      - PolicyDocument:
+          Statement:
+          - Action:
+              - codebuild:BatchGetBuilds
+              - codebuild:StartBuild
+              - cloudformation:CreateStack
+              - cloudformation:DeleteStack
+              - cloudformation:DescribeStacks
+              - cloudformation:UpdateStack
+              - cloudformation:CreateChangeSet
+              - cloudformation:DeleteChangeSet
+              - cloudformation:DescribeChangeSet
+              - cloudformation:ExecuteChangeSet
+              - cloudformation:SetStackPolicy
+              - cloudformation:ValidateTemplate
+              - ecr:DescribeImages
+            Effect: Allow
+            Resource: "*"
+          - Action:
+              - iam:PassRole
+            Effect: Allow
+            Resource: "*"
+            Condition:
+              StringEqualsIfExists:
+                iam:PassedToService:
+                  - cloudformation.amazonaws.com
+          - Action:
+            - s3:*
+            Effect: Allow
+            Resource:
+            - !Sub arn:aws:s3:::ecs-cluster-deployer-${AWS::AccountId}-${AWS::Region}
+            - !Sub arn:aws:s3:::ecs-cluster-deployer-${AWS::AccountId}-${AWS::Region}/*
+        PolicyName: pipeline-base
