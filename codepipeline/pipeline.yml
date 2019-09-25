@@ -46,7 +46,8 @@ Resources:
                 ProjectName: !Ref BuildDockerCodebuild
               InputArtifacts:
                 - Name: SourceOutput
-              OutputArtifacts: []
+              OutputArtifacts:
+                - Name: AppVersion
               RunOrder: '1'
 
         - Name: deploy
@@ -63,8 +64,12 @@ Resources:
                 ParameterOverrides: '{"Count": "2", "Subnets": "subnet-0c00ee77,subnet-a6954dcf,subnet-d65b579c", "ClusterName": "dev-jamf", "ServiceName": "my-ip", "Vpc": "vpc-9aab64f3", "ALBSGBadgeFromCluster": "sg-0e76fbe6ca3610b09"}'
                 RoleArn: !GetAtt CloudFormationRole.Arn
                 StackName: test-ecs-my-ip
-                TemplateConfiguration: "SourceOutput::parameters-app.json"
+                TemplateConfiguration: "AppVersion::version.json"
                 TemplatePath: "SourceOutput::app-stack.yml"
+                ParameterOverrides: |
+                  {
+                    "Version": {"Fn::GetParam": ["Version", "version.json", "Version"]}
+                  }
               InputArtifacts:
                 - Name: SourceOutput
               OutputArtifacts: []
