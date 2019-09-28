@@ -11,7 +11,8 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - echo '{"Version":"$CODEBUILD_RESOLVED_SOURCE_VERSION"}' > version.json
+      - echo '{"Version":"${CODEBUILD_RESOLVED_SOURCE_VERSION}"}' > version.json
+      - cat version.json
       - docker build -t $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION .
       - docker tag $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
   post_build:

@@ -104,14 +104,20 @@ Resources:
               - ec2:*
               - logs:*
               - elasticloadbalancingv2:*
+              - elasticloadbalancing:*
               - iam:Get*
               - iam:Create*
               - iam:Update*
               - iam:Delete*
-
+              - iam:Put*
             Effect: Allow
             Resource:
               - "*"
+          - Action:
+              - iam:PassRole
+            Effect: Allow
+            Resource:
+              - !Sub arn:aws:iam::${AWS::AccountId}:role/test-ecs-my-ip-servicerole
   CodeBuildDockerRole:
     Type: AWS::IAM::Role
     Properties:
