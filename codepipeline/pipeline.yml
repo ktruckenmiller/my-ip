@@ -118,7 +118,7 @@ Resources:
               - iam:PassRole
             Effect: Allow
             Resource:
-              - !Sub arn:aws:iam::${AWS::AccountId}:role/test-ecs-my-ip-servicerole
+              - !Sub arn:aws:iam::${AWS::AccountId}:role/test-ecs-my-ip-*
   CodeBuildDockerRole:
     Type: AWS::IAM::Role
     Properties:
