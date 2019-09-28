@@ -14,6 +14,7 @@
       Count: "2"
       ALBSGBadgeFromCluster: sg-0e76fbe6ca3610b09
       HostedZone: ZU20SE53GVCYV
+      HostedZoneName: clustermaestro.com
       Priority: "1"
 
   tasks:

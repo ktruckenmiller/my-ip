@@ -23,7 +23,6 @@ Parameters:
     Type: String
   HostedZoneName:
     Type: String
-    Default: clustermaestro.com.
   Priority:
     Type: String
 
