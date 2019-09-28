@@ -13,6 +13,8 @@
       ServiceName: my-ip
       Count: "2"
       ALBSGBadgeFromCluster: sg-0e76fbe6ca3610b09
+      HostedZone: ZU20SE53GVCYV
+      Priority: "1"
 
   tasks:
     - name: jinja-it

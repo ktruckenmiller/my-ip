@@ -76,6 +76,8 @@ Resources:
                     "ClusterName": "{{codebuild_params['ClusterName']}}",
                     "Count": "{{codebuild_params['Count']}}",
                     "ALBSGBadgeFromCluster": "{{codebuild_params['ALBSGBadgeFromCluster']}}",
+                    "HostedZone": "{{codebuild_params['HostedZone']}}",
+                    "Priority": "{{codebuild_params['Priority']}}",
                     "Version": {"Fn::GetParam": ["AppVersion", "version.json", "Version"]}
                   }
 
