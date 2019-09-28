@@ -135,7 +135,7 @@ Resources:
       LoadBalancers:
         - ContainerName: !Sub ${ServiceName}
           ContainerPort: 3000
-          TargetGroupArn: !Ref TargetGroup443
+          TargetGroupArn: !Ref TargetGroup80
       Role: !GetAtt ServiceRole.Arn
       HealthCheckGracePeriodSeconds: 10
       PlacementStrategies:

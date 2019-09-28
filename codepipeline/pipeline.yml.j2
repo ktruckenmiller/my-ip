@@ -58,20 +58,27 @@ Resources:
                 Owner: AWS
                 Provider: CloudFormation
                 Version: '1'
+              InputArtifacts:
+                - Name: SourceOutput
+                - Name: AppVersion
               Configuration:
                 ActionMode: CREATE_UPDATE
                 Capabilities: "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND,CAPABILITY_IAM"
                 ParameterOverrides: '{{ codebuild_params | to_json }}'
                 RoleArn: !GetAtt CloudFormationRole.Arn
                 StackName: test-ecs-my-ip
-                TemplateConfiguration: "AppVersion::version.json"
                 TemplatePath: "SourceOutput::app-stack.yml"
                 ParameterOverrides: |
                   {
-                    "Version": {"Fn::GetParam": ["Version", "version.json", "Version"]}
+                    "Subnets": "{{codebuild_params['Subnets']}}",
+                    "ServiceName": "{{codebuild_params['ServiceName']}}",
+                    "Vpc": "{{codebuild_params['Vpc']}}",
+                    "ClusterName": "{{codebuild_params['ClusterName']}}",
+                    "Count": "{{codebuild_params['Count']}}",
+                    "ALBSGBadgeFromCluster": "{{codebuild_params['ALBSGBadgeFromCluster']}}",
+                    "Version": {"Fn::GetParam": ["AppVersion", "version.json", "Version"]}
                   }
-              InputArtifacts:
-                - Name: SourceOutput
+
               OutputArtifacts: []
               RunOrder: '1'
 
