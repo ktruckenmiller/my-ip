@@ -84,7 +84,7 @@ Resources:
         - Field: host-header
           Values:
           - !Sub ${ServiceName}.${HostedZone}
-      ListenerArn: !GetAtt Listener.Arn
+      ListenerArn: !Ref Listener
       Priority: !Sub ${Priority}
 
   # ListenerCertificate:
