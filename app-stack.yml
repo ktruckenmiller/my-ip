@@ -90,7 +90,7 @@ Resources:
       Conditions:
         - Field: host-header
           Values:
-          - !Sub ${ServiceName}.${HostedZone}
+          - !Sub ${ServiceName}.${HostedZoneName}
       ListenerArn: !Ref Listener
       Priority: !Sub ${Priority}
 
