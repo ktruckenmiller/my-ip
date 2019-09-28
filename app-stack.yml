@@ -21,6 +21,8 @@ Parameters:
     Type: String
   HostedZone:
     Type: String
+  Priority:
+    Type: String 
 
 
 Resources:
