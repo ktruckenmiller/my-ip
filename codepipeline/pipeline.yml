@@ -106,6 +106,8 @@ Resources:
               - logs:*
               - elasticloadbalancingv2:*
               - elasticloadbalancing:*
+              - route53:Get*
+              - route53:ChangeResourceRecordSets
             Effect: Allow
             Resource:
               - "*"

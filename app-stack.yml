@@ -39,7 +39,7 @@ Resources:
       Type: A
       Weight: 100
       TTL: 60
-      SetIdentifier: !Sub ${AWS::Region}
+      SetIdentifier: !Sub useast2
   ALB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
