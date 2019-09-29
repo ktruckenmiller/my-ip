@@ -37,6 +37,9 @@ Resources:
       HostedZoneId: !Sub ${HostedZone}
       Name: !Sub 'jamf.${HostedZoneName}.'
       Type: A
+      Weight: 100
+      TTL: 60
+      SetIdentifier: !Sub ${AWS::Region}
   ALB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
