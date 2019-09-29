@@ -35,7 +35,7 @@ Resources:
         HostedZoneId: !GetAtt ALB.CanonicalHostedZoneID
         DNSName: !GetAtt ALB.DNSName
       HostedZoneId: !Sub ${HostedZone}
-      Name: !Sub 'jamf.${HostedZoneName}.'
+      Name: !Sub '${ServiceName}.${HostedZoneName}.'
       Type: A
       Weight: 100
       SetIdentifier: !Sub useast2
