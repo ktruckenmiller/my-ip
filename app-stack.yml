@@ -28,6 +28,15 @@ Parameters:
 
 
 Resources:
+  ARecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        HostedZoneId: !GetAtt ALB.CanonicalHostedZoneID
+        DNSName: !GetAtt ALB.DNSName
+      HostedZoneId: {'Fn::ImportValue': !Sub '${HostedZone}'}
+      Name: !Sub 'jamf.${HostedZoneName}.'
+      Type: A
   ALB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
