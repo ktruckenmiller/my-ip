@@ -1,6 +1,6 @@
 'use strict';
 
-const Hapi = require('hapi');
+const Hapi = require('@hapi/hapi');
 
 const server = Hapi.server({
     port: 3000,
@@ -41,7 +41,7 @@ process.on('unhandledRejection', (err) => {
 const stopServer = () => {
   console.log('stopping hapi server')
 
-  server.stop({ timeout: 10000 }).then(function (err) {
+  server.stop({ timeout: 3000 }).then(function (err) {
     console.log('hapi server stopped')
     process.exit((err) ? 1 : 0)
   })
