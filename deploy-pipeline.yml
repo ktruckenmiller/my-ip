@@ -12,7 +12,7 @@
       ClusterName: dev-jamf
       ServiceName: my-ip
       SubDomain: jamf
-      Count: "2"
+      Count: "8"
       ALBSGBadgeFromCluster: sg-0e76fbe6ca3610b09
       HostedZone: ZU20SE53GVCYV
       HostedZoneName: clustermaestro.com
