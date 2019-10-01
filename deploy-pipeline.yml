@@ -11,6 +11,7 @@
       Vpc: vpc-9aab64f3
       ClusterName: dev-jamf
       ServiceName: my-ip
+      SubDomain: jamf
       Count: "2"
       ALBSGBadgeFromCluster: sg-0e76fbe6ca3610b09
       HostedZone: ZU20SE53GVCYV

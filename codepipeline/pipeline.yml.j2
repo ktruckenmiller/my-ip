@@ -79,7 +79,8 @@ Resources:
                     "HostedZone": "{{codebuild_params['HostedZone']}}",
                     "HostedZoneName": "{{codebuild_params['HostedZoneName']}}",
                     "Priority": "{{codebuild_params['Priority']}}",
-                    "Version": {"Fn::GetParam": ["AppVersion", "version.json", "Version"]}
+                    "Version": {"Fn::GetParam": ["AppVersion", "version.json", "Version"]},
+                    "SubDomain": "{{codebuild_params['SubDomain']}}"
                   }
 
               OutputArtifacts: []
