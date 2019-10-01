@@ -41,7 +41,7 @@ process.on('unhandledRejection', (err) => {
 const stopServer = () => {
   console.log('stopping hapi server')
 
-  server.stop({ timeout: 3000 }).then(function (err) {
+  server.stop({ timeout: 30000 }).then(function (err) {
     console.log('hapi server stopped')
     process.exit((err) ? 1 : 0)
   })
