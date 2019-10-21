@@ -144,7 +144,7 @@ Resources:
                 Resource: "*"
   Service:
     DependsOn:
-      - ListenerRule80
+      # - ListenerRule80
       - Role
     Type: AWS::ECS::Service
     Properties:
