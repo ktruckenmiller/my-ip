@@ -26,15 +26,15 @@ steps:
     commands:
       - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
 
-  - name: deploy-jamf
-    image: ktruckenmiller/ansible
-    depends_on: [build-docker]
-    environment:
-      AWS_DEFAULT_REGION: us-west-2
-      VERSION: ${DRONE_COMMIT}
-      SERVICE_NAME: jamf
-      CLUSTER: staging-kloudcover
-      PRIORITY: 50
-      COUNT: 1
-    commands:
-      - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
+  # - name: deploy-jamf
+  #   image: ktruckenmiller/ansible
+  #   depends_on: [build-docker]
+  #   environment:
+  #     AWS_DEFAULT_REGION: us-west-2
+  #     VERSION: ${DRONE_COMMIT}
+  #     SERVICE_NAME: jamf
+  #     CLUSTER: staging-kloudcover
+  #     PRIORITY: 50
+  #     COUNT: 1
+  #   commands:
+  #     - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
