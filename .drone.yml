@@ -19,7 +19,7 @@ steps:
       AWS_DEFAULT_REGION: us-west-2
       VERSION: ${DRONE_COMMIT}
       SERVICE_NAME: my-ip
-      CLUSTER: kloudcover
+      CLUSTER: production-kloudcover
       PRIORITY: 17
       COUNT: 2
 
