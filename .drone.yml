@@ -1,6 +1,10 @@
 ---
 kind: pipeline
 name: build-lambda
+type: docker
+platform:
+  os: linux
+  arch: arm64
 steps:
   - name: build-docker
     image: plugins/ecr
@@ -13,28 +17,15 @@ steps:
         - ${DRONE_COMMIT}
 
   - name: deploy-clustermaestro
-    image: ktruckenmiller/ansible
+    image: ktruckenmiller/ansible:arm
     depends_on: [build-docker]
     environment:
       AWS_DEFAULT_REGION: us-west-2
       VERSION: ${DRONE_COMMIT}
       SERVICE_NAME: my-ip
-      CLUSTER: production-kloudcover
+      CLUSTER: production-kloudcover-v3
       PRIORITY: 17
       COUNT: 2
 
     commands:
       - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv
-
-  # - name: deploy-jamf
-  #   image: ktruckenmiller/ansible
-  #   depends_on: [build-docker]
-  #   environment:
-  #     AWS_DEFAULT_REGION: us-west-2
-  #     VERSION: ${DRONE_COMMIT}
-  #     SERVICE_NAME: jamf
-  #     CLUSTER: staging-kloudcover
-  #     PRIORITY: 50
-  #     COUNT: 1
-  #   commands:
-  #     - ansible-playbook -i ansible_connection=localhost deploy.yml -vvv

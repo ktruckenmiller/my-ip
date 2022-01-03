@@ -140,7 +140,7 @@ Resources:
       MemorySize: 128
       FunctionName: !Sub ${ServiceName}HealthCheck-${Environment}
       Role: !GetAtt HealthCheckLambdaRole.Arn
-      Runtime: nodejs8.10
+      Runtime: nodejs14.x
       Timeout: 10
       Handler: index.handler
       Environment:
